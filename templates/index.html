@@ -27,7 +27,7 @@
             font-weight: normal;
         }
         .label {
-            font-weight: 700; /* Makes "You:" and "Bot:" semibold */
+            font-weight: 700;
         }
     </style>
 </head>
@@ -47,6 +47,7 @@
                     <input type="file" id="documentInput" class="text-sm text-gray-300 bg-gray-700 p-2 rounded-lg w-full">
                     <button type="submit" class="mt-2 w-full bg-gray-700 rounded-lg px-4 py-2 text-lg font-semibold text-white transition duration-300 gradient-hover">Upload Document</button>
                 </form>
+                <button id="deleteBtn" class="mt-2 w-full bg-red-600 rounded-lg px-4 py-2 text-lg font-semibold text-white transition duration-300 gradient-hover">Delete Document</button>
             </div>
 
             <!-- Q&A Chat Section -->
@@ -73,6 +74,7 @@
         const documentPlaceholder = document.getElementById('documentPlaceholder');
         const chatPlaceholder = document.getElementById('chatPlaceholder');
         const uploadForm = document.getElementById('uploadForm');
+        const deleteBtn = document.getElementById('deleteBtn');
 
         function displayInitialChatbotMessage() {
             chatPlaceholder.style.display = 'none';
@@ -134,6 +136,20 @@
                     documentContentDiv.innerHTML = `<p>Error processing document. Please try again.</p>`;
                 });
             }
+        };
+
+        deleteBtn.onclick = () => {
+            fetch('/delete', { method: 'POST' })
+            .then(() => {
+                documentContentDiv.innerHTML = `<p>Document deleted. The page will reload.</p>`;
+                setTimeout(() => {
+                    location.reload();
+                }, 1000);
+            })
+            .catch(error => {
+                console.error('Error deleting document:', error);
+                documentContentDiv.innerHTML = `<p>Error deleting document. Please try again.</p>`;
+            });
         };
     </script>
 </body>
